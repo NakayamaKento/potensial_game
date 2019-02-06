@@ -18,7 +18,15 @@ class agent:
 		elif self.Pass == 3:
 			agent.pass3 -= 1
 		self.Pass = newpass
+		if newpass == 1:
+			agent.pass1 += 1
+		elif newpass == 2:
+			agent.pass2 += 1
+		elif newpass == 3:
+			agent.pass3 +=1
+		print("pass1:", agent.pass1, ", pass2:", agent.pass2, ", pass3:", agent.pass3)
 
+			
 	def calc_Ce1(self, num):
 		return 3+3*num
 
@@ -36,32 +44,42 @@ class agent:
 
 	def calc_Ui(self):
 		if self.Pass == 1:
-			return -( calc_Ce1(agent.pass1) + calc_Ce3(agent.pass1) )
+			return -( self.calc_Ce1(agent.pass1) + self.calc_Ce3(agent.pass1) )
 		elif self.Pass == 2:
-			return -( calc_Ce2(agent.pass2) + calc_Ce4(agent.pass2) )
+			return -( self.calc_Ce2(agent.pass2) + self.calc_Ce4(agent.pass2) )
 		elif self.Pass == 3:
-			return -( calc_Ce1(agent.pass3) + calc_Ce4(agent.pass3) + calc_Ce5(agent.pass3) )
+			return -( self.calc_Ce1(agent.pass3) + self.calc_Ce4(agent.pass3) + self.calc_Ce5(agent.pass3) )
 
 
 	def potential(self):
-		value
+		value = 0
 		#e1の計算
 		for k in range(1, agent.pass1 + agent.pass3 + 1):
-			value += calc_Ce1(k)
+			value += self.calc_Ce1(k)
 		#e2の計算
 		for k in range(1, agent.pass2 + 1):
-			value += calc_Ce2(k)
+			value += self.calc_Ce2(k)
 		#e3の計算
 		for k in range(1, agent.pass1 + 1):
-			value += calc_Ce3(k)
+			value += self.calc_Ce3(k)
 		#e4の計算
 		for k in range(1, agent.pass2 + agent.pass3 +1):
-			value += calc_Ce4(k)
+			value += self.calc_Ce4(k)
 		#e5の計算
 		for k in range(1, agent.pass3 + 1):
-			value += calc_Ce5(k)
+			value += self.calc_Ce5(k)
+		return -value
 
 #エージェントの初期化
-agent_list =['a', 'b', 'c', 'd']
-for N in agent_list:
-	agent_list = agent()
+agent_list=[agent(), agent(), agent(), agent()]
+
+for i, name in enumerate(agent_list):
+	#print(i)
+	name.change_pass(1)
+	for j in range(2):
+		print("効用関数", name.calc_Ui())
+		print("ポテンシャル関数", name.potential())
+		print()
+		if j ==1:
+			break
+		name.change_pass(2)
