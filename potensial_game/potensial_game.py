@@ -24,9 +24,10 @@ class agent:
 			agent.pass2 += 1
 		elif newpass == 3:
 			agent.pass3 +=1
+
+	def print_pass(self):
 		print("pass1:", agent.pass1, ", pass2:", agent.pass2, ", pass3:", agent.pass3)
 
-			
 	def calc_Ce1(self, num):
 		return 3+3*num
 
@@ -49,6 +50,18 @@ class agent:
 			return -( self.calc_Ce2(agent.pass2) + self.calc_Ce4(agent.pass2) )
 		elif self.Pass == 3:
 			return -( self.calc_Ce1(agent.pass3) + self.calc_Ce4(agent.pass3) + self.calc_Ce5(agent.pass3) )
+
+	def calc_objfunc(self):
+		ans = 0
+		for i in range(agent.pass1 + agent.pass2 + agent.pass3):
+			for j in range(agent.pass1):
+				ans += -( self.calc_Ce1(agent.pass1) + self.calc_Ce3(agent.pass1) )
+			for j in range(agent.pass2):
+				ans += -( self.calc_Ce2(agent.pass2) + self.calc_Ce4(agent.pass2) )
+			for j in range(agent.pass3):
+				ans += -( self.calc_Ce1(agent.pass3) + self.calc_Ce4(agent.pass3) + self.calc_Ce5(agent.pass3) )
+		return ans
+			
 
 
 	def potential(self):
@@ -74,12 +87,13 @@ class agent:
 agent_list=[agent(), agent(), agent(), agent()]
 
 for i, name in enumerate(agent_list):
-	#print(i)
-	name.change_pass(1)
-	for j in range(2):
-		print("効用関数", name.calc_Ui())
-		print("ポテンシャル関数", name.potential())
-		print()
-		if j ==1:
-			break
-		name.change_pass(2)
+	print("エージェント", i,"の移動")
+	for j in range(3):
+		name.print_pass()
+		#print("効用関数：", name.calc_Ui())
+		#print("ポテンシャル関数：", name.potential())
+		#print("大域目的関数：", name.calc_objfunc())
+		if j ==0:
+			name.change_pass(2)
+		elif j == 1:
+			name.change_pass(3)
